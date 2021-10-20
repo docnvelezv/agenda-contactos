@@ -16,9 +16,6 @@ class AuthProvider {
 
     AuthResponse authResponse = AuthResponse(jsonResponse);
 
-    print(authResponse.message);
-    print(authResponse.token);
-
     return authResponse;
   }
 }
