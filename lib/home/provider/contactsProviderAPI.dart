@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:app_contactos/home/model/contactsResponse.dart';
 import 'package:http/http.dart' as http;
 
-class ContactsProvider {
+class ContactsProviderApi {
   Future<ContactsResponse> obtenerListadoContactos(String token) async {
     var url = Uri.parse("http://10.0.2.2:8282/api/contacto/list");
 
@@ -13,7 +13,7 @@ class ContactsProvider {
 
     var jsonResponse = jsonDecode(rawResponse);
 
-    ContactsResponse contactsResponse = ContactsResponse(jsonResponse);
+    ContactsResponse contactsResponse = ContactsResponse.fromAPI(jsonResponse);
 
     return contactsResponse;
   }

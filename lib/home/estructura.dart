@@ -1,6 +1,7 @@
 import 'package:app_contactos/home/contactCard.dart';
 import 'package:app_contactos/home/model/contactsResponse.dart';
-import 'package:app_contactos/home/provider/contactsProvider.dart';
+import 'package:app_contactos/home/provider/contactsProviderAPI.dart';
+import 'package:app_contactos/home/provider/contactsProviderDB.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -38,8 +39,15 @@ class _MyContactsPageState extends State<MyContactsPage> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var token = await prefs.getString('token');
 
-    ContactsProvider cp = ContactsProvider();
-    ContactsResponse cr = await cp.obtenerListadoContactos(token.toString());
+    ContactsProviderApi cpapi = ContactsProviderApi();
+    ContactsProviderDb cpdb = ContactsProviderDb();
+    await cpdb.init();
+
+    ContactsResponse cr = await cpdb.obtenerContactos();
+
+    if (cr.contactList.length == 0) {
+      cr = await cpapi.obtenerListadoContactos(token.toString());
+    }
 
     List<Widget> contactosCargados = <Widget>[];
 
