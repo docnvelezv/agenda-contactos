@@ -27,32 +27,32 @@ class ContactsProviderDb {
     }, version: 1);
   }
 
-  agregarContactos() async {
+  agregarContacto(ContactModel cm) async {
     await this.db!.rawInsert("""
-    INSERT INTO Contactos (_id, nombre, apellidos, email, telefono)
-    VALUES (?,?,?,?,?)
-    """, ['1', 'juan', 'perez', 'juanperez@hotmail.com', '300123123']);
-
-    await this.db!.insert("Contactos", {
-      "_id": "2",
-      "nombre": "ana",
-      "apellidos": "lopez",
-      "email": "ana@gmail.com",
-      "telefono": "23421236",
-    });
+      INSERT INTO Contactos (_id, nombre, apellidos, email, telefono)
+      VALUES (?,?,?,?,?)
+      """, [cm.id, cm.nombre, cm.apellidos, cm.email, cm.telefono]);
   }
 
   eliminarContactos() async {
-    await this.db!.delete("Contactos", where: "_id", whereArgs: ["1"]);
-    await this.db!.rawDelete("""DELETE FROM Contactos WHERE _id = ?""", ["2"]);
+    await this.db!.rawDelete("""DELETE FROM Contactos""");
   }
 
   Future<ContactsResponse> obtenerContactos() async {
-    var results = await this.db!.rawQuery("SELECT* FROM Contactos");
+    var results = await this
+        .db!
+        .rawQuery("SELECT * FROM Contactos ORDER BY nombre, apellidos");
     // var results = await this.db!.query("Contactos", where: "_id", whereArgs: ["1"] );
 
     ContactsResponse response = ContactsResponse.fromDB(results);
 
+    return response;
+  }
+
+  Future<ContactsResponse> obtenerContactosPorId(String id) async {
+    var results =
+        await this.db!.rawQuery("SELECT * FROM Contactos WHERE _id = ? ", [id]);
+    ContactsResponse response = ContactsResponse.fromDB(results);
     return response;
   }
 }

@@ -1,3 +1,4 @@
+import 'package:app_contactos/createcontact/estructura.dart';
 import 'package:app_contactos/home/estructura.dart';
 import 'package:app_contactos/login/estructura.dart';
 import 'package:app_contactos/register/estructura.dart';
@@ -8,5 +9,6 @@ void main() {
     MyLoginPage.ruta: (BuildContext context) => MyLoginPage(),
     MyRegisterPage.ruta: (BuildContext context) => MyRegisterPage(),
     MyContactsPage.ruta: (BuildContext context) => MyContactsPage(),
+    CreateContactPage.ruta: (BuildContext context) => CreateContactPage(),
   }));
 }

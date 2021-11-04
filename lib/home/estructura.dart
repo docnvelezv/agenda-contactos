@@ -1,3 +1,4 @@
+import 'package:app_contactos/createcontact/estructura.dart';
 import 'package:app_contactos/home/contactCard.dart';
 import 'package:app_contactos/home/model/contactsResponse.dart';
 import 'package:app_contactos/home/provider/contactsProviderAPI.dart';
@@ -28,11 +29,18 @@ class _MyContactsPageState extends State<MyContactsPage> {
           title: Text("Listado de contactos"),
         ),
         body: Center(
-          child: Column(
+            child: ListView(children: [
+          Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: this.listadoContactosWidgets,
           ),
-        ));
+        ])),
+        floatingActionButton: FloatingActionButton.extended(
+            onPressed: () {
+              Navigator.pushNamed(context, CreateContactPage.ruta);
+            },
+            label: Text("Crear Contacto"),
+            icon: Icon(Icons.add)));
   }
 
   void obtenerListadoContactos() async {
@@ -43,19 +51,29 @@ class _MyContactsPageState extends State<MyContactsPage> {
     ContactsProviderDb cpdb = ContactsProviderDb();
     await cpdb.init();
 
-    ContactsResponse cr = await cpdb.obtenerContactos();
+    //// TODO: PENDIENTE HACER VALIDACIÓN CONECTIVIDAD
+    ContactsResponse crapi =
+        await cpapi.obtenerListadoContactos(token.toString());
 
-    if (cr.contactList.length == 0) {
-      cr = await cpapi.obtenerListadoContactos(token.toString());
+    for (int i = 0; i < crapi.contactList.length; i++) {
+      ContactsResponse temp =
+          await cpdb.obtenerContactosPorId(crapi.contactList[i].id);
+      if (temp.contactList.length == 0) {
+        cpdb.agregarContacto(crapi.contactList[i]);
+      }
     }
+
+    ////
+
+    ContactsResponse crbd = await cpdb.obtenerContactos();
 
     List<Widget> contactosCargados = <Widget>[];
 
-    for (int i = 0; i < cr.contactList.length; i++) {
+    for (int i = 0; i < crbd.contactList.length; i++) {
       Widget wd = ContactCard(
-          cr.contactList[i].nombre + " " + cr.contactList[i].apellidos,
-          cr.contactList[i].telefono,
-          cr.contactList[i].email);
+          crbd.contactList[i].nombre + " " + crbd.contactList[i].apellidos,
+          crbd.contactList[i].telefono,
+          crbd.contactList[i].email);
 
       contactosCargados.add(wd);
     }

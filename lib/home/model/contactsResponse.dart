@@ -20,17 +20,26 @@ class ContactsResponse {
 }
 
 class ContactModel {
-  String _id = "";
+  String id = "";
   String nombre = "";
   String apellidos = "";
   String email = "";
   String telefono = "";
 
   ContactModel(Map jsonContactsResponse) {
-    this._id = jsonContactsResponse["_id"];
+    this.id = jsonContactsResponse["_id"];
     this.nombre = jsonContactsResponse["nombre"];
     this.apellidos = jsonContactsResponse["apellidos"];
     this.email = jsonContactsResponse["email"];
     this.telefono = jsonContactsResponse["telefono"];
+  }
+
+  ContactModel.fromValues(
+      String nombre, String apellidos, String email, String telefono) {
+    this.id = "";
+    this.nombre = nombre;
+    this.apellidos = apellidos;
+    this.email = email;
+    this.telefono = telefono;
   }
 }
