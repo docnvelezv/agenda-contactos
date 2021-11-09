@@ -17,6 +17,10 @@ class ContactsResponse {
       this.contactList.add(cm);
     }
   }
+
+  ContactsResponse.vacio() {
+    this.contactList = List.empty();
+  }
 }
 
 class ContactModel {

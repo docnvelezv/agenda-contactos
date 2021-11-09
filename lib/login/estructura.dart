@@ -21,9 +21,11 @@ class _MyLoginPageState extends State<MyLoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    validarSesion();
     return Scaffold(
         appBar: AppBar(
           title: Text("Iniciar Sesión"),
+          automaticallyImplyLeading: false,
         ),
         body: Container(
             child: Form(
@@ -116,6 +118,17 @@ class _MyLoginPageState extends State<MyLoginPage> {
 
       formKey.currentState!.reset();
 
+      Navigator.pushNamed(context, MyContactsPage.ruta);
+    }
+  }
+
+  validarSesion() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = await prefs.getString('token');
+
+    bool existeToken = token == null ? false : true;
+
+    if (existeToken) {
       Navigator.pushNamed(context, MyContactsPage.ruta);
     }
   }

@@ -55,4 +55,16 @@ class ContactsProviderDb {
     ContactsResponse response = ContactsResponse.fromDB(results);
     return response;
   }
+
+  Future<ContactsResponse> obtenerContactosPendientesPorSincronizar() async {
+    var results =
+        await this.db!.rawQuery("SELECT * FROM Contactos WHERE _id = '' ");
+    ContactsResponse response = ContactsResponse.fromDB(results);
+    return response;
+  }
+
+  Future<void> eliminarContactosSincronizados() async {
+    var results =
+        await this.db!.rawDelete("DELETE FROM Contactos WHERE _id = '' ");
+  }
 }
